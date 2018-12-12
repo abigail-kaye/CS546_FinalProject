@@ -1,0 +1,23 @@
+{
+  "name": "edrick-lab10",
+  "version": "0.0.1",
+  "description": "A login system.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Edrick Ramos",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^3.0.2",
+    "bcrypt-nodejs": "^0.0.3",
+    "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.4",
+    "express-handlebars": "^3.0.0",
+    "express-session": "^1.15.6",
+    "jquery": "^3.3.1",
+    "mongodb": "^2.2.33"
+  }
+}

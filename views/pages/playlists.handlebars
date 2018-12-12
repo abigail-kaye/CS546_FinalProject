@@ -1,0 +1,22 @@
+<div class="row">
+    <div class="col-sm-12">
+        {{#each playlists}}
+        <h1>{{this.title}}</h1>
+            <ul class="list-group">
+                <li class="list-group-item active">Songs</li>
+
+                <form id="static-form" action='/addsong/{{this._id}}' method="get">
+                    <div class="form-group">
+                        <button type="submit">Add Song</button>
+                    </div>
+                </form>
+
+                {{#each this.songs}}
+                <li class="list-group-item">{{ this }}</li>
+                {{/each}}
+            </ul>
+        {{/each}}
+    </div>
+</div>
+
+
