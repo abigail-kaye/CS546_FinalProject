@@ -79,6 +79,32 @@ app.post('/songList', function (req, res) {
     res.redirect('/songList');
 });
 
+app.get('/searchResults', protectPrivateRoute, function (req, res) {
+   users.getUserById(req.cookies.AuthCookie).then( async function (user) {
+        const userSongs = await songs.searchForSong(req.query);
+        if (userSongs.length == 0){
+            res.render('pages/noResults', {
+                search: req,
+                layout : 'loggedin.handlebars'
+            });
+        } else{
+            res.render('pages/searchResults', {
+                search: req,
+                songs: userSongs,
+                layout: 'loggedin.handlebars'
+            });
+        }
+
+        
+    });
+    
+});
+
+app.post('/searchResults', function (req,res) {
+    res.redirect('/songList');
+})
+
+
 
 // There are two different layouts one for when a user is not logged in
 // and a layout for when a user IS logged in. When navigating to a page

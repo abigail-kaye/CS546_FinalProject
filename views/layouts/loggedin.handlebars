@@ -8,13 +8,12 @@
         crossorigin="anonymous">
 
 <nav>
-    <form id="logout-form" action='/logout' method="get">
-        <button type="submit" class="btn btn-primary">Log Out</button>
-        <input type="text" placeholder="Search...">
+    <form id="nav-form" action='/searchResults' method="get">
+        <button type="submit" class="btn btn-primary" formaction="/logout">Log Out</button>
+        <input type="text" placeholder="Search..." id="query" name="query"> <button type="submit" class="btn btn-primary" formaction="/searchResults">Search!</button>
         <button type="submit" class="btn btn-primary" formaction="/songList">View all songs</button>
         <button type="submit" class="btn btn-primary" formaction="/playlists">View all playlists</button>
     </form>
-
 </nav>
 </head>
 

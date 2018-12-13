@@ -37,38 +37,47 @@ let exportedMethods = {
 
     /////////////
     async searchForSong(searchValue){
-        if (typeof searchValue !== 'string') throw "Please provide a valid search entry";
+        // console.log(typeof searchValue);
 
+        
+        
+        if (typeof searchValue.query !== 'string') throw "Please provide a valid search entry";
+
+        let searchTerm = searchValue.query;
+        
         let foundSongs = [];
         const songsCol = await songDb();
         const songs = await songsCol.find().toArray();
-
         for (i = 0; i < songs.length; i++) {
             let song = songs[i];
+            // console.log(song);
             let added = false;
-            if (song.name.contains(searchValue)) {
+            if (song.name.includes(searchTerm)) {
                 foundSongs.push(song);
                 added = true;
             }
-            else if (song.artist.contains(searchValue)) {
+            else if (song.artist.includes(searchTerm)) {
                 foundSongs.push(song);
                 added = true;
             }
-            else if (song.album.contains(searchValue)){
+            else if (song.album.includes(searchTerm)){
                 foundSongs.push(song);
                 added = true;
             }
             
             const songTags = song.tags;
             
+
+            /* --- not in yet....
             for (j = 0; j < songTags.length; j++){
                 let tag = songTags[j];
-                if (tag.contains(searchValue) && added == false){
+                if (tag.includes(searchTerm) && added == false){
                     foundSongs.push(song);
                     added = true;
                 }
                     
             }
+            */
         }
         return foundSongs;
     },
