@@ -37,14 +37,9 @@ let exportedMethods = {
 
     /////////////
     async searchForSong(searchValue){
-        // console.log(typeof searchValue);
-
-        
-        
         if (typeof searchValue.query !== 'string') throw "Please provide a valid search entry";
 
         let searchTerm = searchValue.query;
-        
         let foundSongs = [];
         const songsCol = await songDb();
         const songs = await songsCol.find().toArray();
@@ -67,7 +62,6 @@ let exportedMethods = {
             
             const songTags = song.tags;
             
-
             /* --- not in yet....
             for (j = 0; j < songTags.length; j++){
                 let tag = songTags[j];
@@ -96,9 +90,9 @@ let exportedMethods = {
         // Search playlists for all playlists from a userId and add them to the build
         for (i = 0; i < songs.length; i++) {
             let song = songs[i];
-            if (song.userId === userId) {
+            //if (song.userId === userId) {
                 userSongs.push(song);
-            }
+            //}
         }
 
         // If user not found return message.
@@ -142,6 +136,7 @@ let exportedMethods = {
             genre: genre,
             rating: rating,
             tags: []
+            //Add something about userID 
 
         };
 
