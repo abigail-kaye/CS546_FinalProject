@@ -68,6 +68,7 @@ app.post('/login', function (req, res) {
 app.get('/songList', protectPrivateRoute, function (req, res) {
     users.getUserById(req.cookies.AuthCookie).then( async function (user) {
         const userSongs = await songs.getSongListByUser(user._id);
+        //console.log(userSongs);
         res.render('pages/songList', {
             songs: userSongs,
             layout: 'loggedin.handlebars'
