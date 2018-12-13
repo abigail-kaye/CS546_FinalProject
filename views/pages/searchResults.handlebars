@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-sm-12">
-        <h1>Search results for: {{search.query.query}} </h1>
+        <h1>{{message}} {{search.query.query}} </h1>
     </div>
     <div>
         <table id="songTable">
@@ -8,7 +8,7 @@
                 <th> Song Name</th>
                 <th> Artist </th>
                 <th> Album </th>
-                
+                <th> Genre(s) </th>
                 <th> Rating </th>
             </tr>
             {{#each songs}}
@@ -16,7 +16,7 @@
                 <th>{{this.name}}</th>
                 <th>{{this.artist}}</th>
                 <th>{{this.album}}</th>
-                
+                <th>{{this.genres}}</th>
                 <th>{{this.rating}}</th>
             </tr>
             {{/each}}

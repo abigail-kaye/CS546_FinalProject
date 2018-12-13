@@ -81,30 +81,19 @@ let exportedMethods = {
         const newId = newInsertInformation.insertedId;
         return newId;
     },
+
     async addSongToPlaylist(playlistId, songTitle) {
         const playlistCollection = await playlistDb();
-        // const playlist = await this.getPlaylistById(playlistId);
-        // const songs = playlist.songs;
+        const playlist = await this.getPlaylistById(playlistId);
 
-        let newSongList = [];
-
-        // songs.foreach(function (element) {
-        //     newSongList.push(element);
-        // });
-
-        newSongList.push(songTitle);
-
-        const updatedPlaylistData = { "songs": newSongList };
-
-        let updateCommand = {
-            $set: updatedPlaylistData
-        };
-
-        const query = {
-            _id: playlistId
-        }
-        await playlistCollection.updateOne(query, updateCommand);
+        return playlistCollection
+            //.update({_id: playlistId}, {$addToSet : {songs: songTitle}}) //To allow no duplicates
+            .update({_id: playlistId}, {$push : {songs: songTitle}}) //To allow duplicates
+            .then(function(){
+                return playlist;
+            });
     },
+
     async deleteSongToPlaylist(playlistId, songId) {
         // Get playlist by id
         // removeOne function based on songId

@@ -35,17 +35,16 @@ let exportedMethods = {
         return false;
     },
 
-    /////////////
     async searchForSong(searchValue){
-        if (typeof searchValue.query !== 'string') throw "Please provide a valid search entry";
+        let foundSongs = [];
+
+        if (typeof searchValue.query !== 'string') return foundSongs;
 
         let searchTerm = searchValue.query;
-        let foundSongs = [];
         const songsCol = await songDb();
         const songs = await songsCol.find().toArray();
         for (i = 0; i < songs.length; i++) {
             let song = songs[i];
-            // console.log(song);
             let added = false;
             if (song.name.includes(searchTerm)) {
                 foundSongs.push(song);
@@ -59,8 +58,15 @@ let exportedMethods = {
                 foundSongs.push(song);
                 added = true;
             }
-            
-            const songTags = song.tags;
+
+            const songGenres = song.genres;
+            for (j = 0; j < songGenres.length; j++){
+                let genre = songGenres[j];
+                if (genre.includes(searchTerm) && added == false){
+                    foundSongs.push(song);
+                    added = true;
+                }
+            }           
             
             /* --- not in yet....
             for (j = 0; j < songTags.length; j++){
@@ -69,7 +75,6 @@ let exportedMethods = {
                     foundSongs.push(song);
                     added = true;
                 }
-                    
             }
             */
         }
@@ -137,7 +142,6 @@ let exportedMethods = {
             rating: rating,
             tags: []
             //Add something about userID 
-
         };
 
         // Insert new song and return its submission id 
