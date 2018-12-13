@@ -84,12 +84,15 @@ app.get('/searchResults', protectPrivateRoute, function (req, res) {
    users.getUserById(req.cookies.AuthCookie).then( async function (user) {
         const userSongs = await songs.searchForSong(req.query);
         if (userSongs.length == 0){
-            res.render('pages/noResults', {
+            res.render('pages/searchResults', {
+                message: "No results found for:",
                 search: req,
-                layout : 'loggedin.handlebars'
+                songs: userSongs,
+                layout: 'loggedin.handlebars'
             });
         } else{
             res.render('pages/searchResults', {
+                message: "Search results for: ",
                 search: req,
                 songs: userSongs,
                 layout: 'loggedin.handlebars'
@@ -105,8 +108,6 @@ app.post('/searchResults', function (req,res) {
     res.redirect('/songList');
 })
 
-
-
 // There are two different layouts one for when a user is not logged in
 // and a layout for when a user IS logged in. When navigating to a page
 // where the user is logged in, you must specifiy the layout to use. In
@@ -114,6 +115,7 @@ app.post('/searchResults', function (req,res) {
 app.get('/playlists', protectPrivateRoute, function (req, res) {
     users.getUserById(req.cookies.AuthCookie).then( async function (user) {
         const usersPlaylists = await playlists.getPlaylistsByUserId(user._id);
+        //console.log(usersPlaylists);
         res.render('pages/playlists', {
             playlists: usersPlaylists,
             layout: 'loggedin.handlebars'
@@ -134,10 +136,16 @@ app.get('/addsong/:playlistId', protectPrivateRoute, async function(req, res) {
 });
 
 app.post('/addsong/:playlistId', protectPrivateRoute, async function (req, res) {
-    console.log(req.body.title);
     if(await songs.songExists(req.body.title)) {
-        let songtitle = await songs.getSongByTitle(req.body.title).title;
-        await playlists.addSongToPlaylist(req.params.playlistId, songtitle);
+        //let songtitle = await songs.getSongByTitle(req.body.title).title;
+        //console.log(req.body.title);
+        await playlists.addSongToPlaylist(req.params.playlistId, req.body.title);
+
+        res.render('pages/addsong', {
+            playlist: await playlists.getPlaylistById(req.params.playlistId),
+            message: "Song added!",
+            layout: 'loggedin.handlebars'
+        });
         // res.redirect("/playlists");
         // But need user id
     }else {
