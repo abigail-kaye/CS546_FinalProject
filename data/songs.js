@@ -72,6 +72,30 @@ let exportedMethods = {
         }
         return foundSongs;
     },
+
+    async getSongListByUser(userId) {
+        // Error checking
+        if (!userId) throw "Please provide a valid user ID to get their playlists";
+
+        // Get playlists from database and turn all playlists to string
+        const songsCol = await songDb();
+        const songs = await songsCol.find().toArray();
+
+        // Build a list of all of the playlists a single user has created
+        let userSongs = [];
+
+        // Search playlists for all playlists from a userId and add them to the build
+        for (i = 0; i < songs.length; i++) {
+            let song = songs[i];
+            if (song.userId === userId) {
+                userSongs.push(song);
+            }
+        }
+
+        // If user not found return message.
+        return userSongs;
+    },
+    
     /////////////
 
     async deleteSong(id) {

@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({
 
 function noDuplicateLogin(req, res, next) {
     if(typeof req.cookies.AuthCookie !== 'undefined') {
-        res.redirect('/playlists');
+        res.redirect('/songList');
     }else {
         return next();
     }
@@ -44,7 +44,7 @@ app.get('/', function (req, res) {
     if(typeof req.cookies.AuthCookie === "undefined") {
         res.redirect('/login');
     }else {
-        res.redirect('/playlists');
+        res.redirect('/songList');
     }
 });
 
@@ -57,13 +57,28 @@ app.post('/login', function (req, res) {
         bcrypt.compare(req.body.password, user.hashedPassword, function (err, response) {
             if (response) {
                 res.cookie("AuthCookie", user._id);
-                res.redirect('/playlists');
+                res.redirect('/songList');
             } else {
                 res.redirect('/login');
             }
         });
     });
 });
+
+app.get('/songList', protectPrivateRoute, function (req, res) {
+    users.getUserById(req.cookies.AuthCookie).then( async function (user) {
+        const userSongs = await songs.getSongListByUser(user._id);
+        res.render('pages/songList', {
+            songs: userSongs,
+            layout: 'loggedin.handlebars'
+        });
+    });
+});
+
+app.post('/songList', function (req, res) {
+    res.redirect('/songList');
+});
+
 
 // There are two different layouts one for when a user is not logged in
 // and a layout for when a user IS logged in. When navigating to a page
@@ -77,6 +92,10 @@ app.get('/playlists', protectPrivateRoute, function (req, res) {
             layout: 'loggedin.handlebars'
         });
     });
+});
+
+app.post('/playlists', function(req,res) {
+    res.redirect('/playlists');
 })
 
 app.get('/addsong/:playlistId', protectPrivateRoute, async function(req, res) {
