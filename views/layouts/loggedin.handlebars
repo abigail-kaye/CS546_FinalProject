@@ -9,14 +9,12 @@
 
 <nav>
     <form id="logout-form" action='/logout' method="get">
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Log Out</button>
-            <input type="text" placeholder="Search...">
-            <button type="submit" class="btn btn-primary">View all songs</button>
-            <button type="submit" class="btn btn-primary">View all playlists</button>
-            
-        </div>
+        <button type="submit" class="btn btn-primary">Log Out</button>
+        <input type="text" placeholder="Search...">
+        <button type="submit" class="btn btn-primary" formaction="/songList">View all songs</button>
+        <button type="submit" class="btn btn-primary" formaction="/playlists">View all playlists</button>
     </form>
+
 </nav>
 </head>
 

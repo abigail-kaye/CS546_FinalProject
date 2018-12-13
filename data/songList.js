@@ -22,6 +22,8 @@ let exportedMethods = {
         }
     },
 
+    
+
     /*
     async deletRow(obj) {
         var index = obj.parentNode.parentNode.rowIndex;
