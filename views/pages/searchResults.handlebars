@@ -3,6 +3,7 @@
         <h1>{{message}} {{search.query.query}} </h1>
     </div>
     <div>
+        <form id="songTable" action='/viewSong' method="post"></form>
         <table id="songTable" border="2" cellpadding="10px" height="50px" width="800px">
             <tr>
                 <th> Song Name</th>
@@ -13,7 +14,7 @@
             </tr>
             {{#each songs}}
             <tr>
-                <th>{{this.name}}</th>
+                <th><button style="background-color:white; border:0px" formaction="">{{this.name}}</button></th>
                 <th>{{this.artist}}</th>
                 <th>{{this.album}}</th>
                 <th>{{this.genres}}</th>
@@ -21,6 +22,7 @@
             </tr>
             {{/each}}
         </table>
+        </form>
     </div>
     
 </div>

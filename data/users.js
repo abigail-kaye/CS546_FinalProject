@@ -2,6 +2,7 @@ const mongoCollections = require("../config/mongoCollections");
 const userDb = mongoCollections.userCollection;
 
 let exportedMethods = {
+    
     async getUserById(id) {
         // Error checking
         if (!id) throw "Please provide a valid ID";
@@ -21,6 +22,7 @@ let exportedMethods = {
         // If user not found return message.
         return "User not found: " + id;
     },
+
     async getUserByName(username) {
         if (!username) throw "Please provide valid username.";
         const userCol = await userDb();

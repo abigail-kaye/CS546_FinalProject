@@ -3,6 +3,7 @@ const playlistDb = mongoCollections.playlistCollection;
 const songs = require('./songs');
 
 let exportedMethods = {
+
     async getPlaylistById(id) {
         // Error checking
         if (!id) throw "Please provide a valid playlist ID";
@@ -14,14 +15,14 @@ let exportedMethods = {
         // Search playlists for the specific ID
         for (i = 0; i < playlists.length; i++) {
             let playlist = playlists[i];
-            if (playlist._id === id) {
+            if (playlist._id === id)
                 return playlist;
-            }
         }
 
         // If playlist not found return message.
         return "Playlist not found: " + id;
     },
+
     async getPlaylistsByUserId(userId) {
         // Error checking
         if (!userId) throw "Please provide a valid user ID to get their playlists";
@@ -36,9 +37,8 @@ let exportedMethods = {
         // Search playlists for all playlists from a userId and add them to the build
         for (i = 0; i < playlists.length; i++) {
             let playlist = playlists[i];
-            if (playlist.userId === userId) {
+            if (playlist.userId === userId)
                 usersPlaylists.push(playlist);
-            }
         }
 
         // If user not found return message.
@@ -47,18 +47,19 @@ let exportedMethods = {
     async deletePlaylist(id) {
         // Error checking
         if (!id) throw "Please provide a valid ID.";
+
         // Get playlists and remove one by id
         const playlistCollection = await playlistDb();
         const deletionInfo = await playlistCollection.removeOne({
             _id: id
         });
+
         // Else throw error message
-        if(deletionInfo.deleteCount === 0) {
+        if(deletionInfo.deleteCount === 0)
             throw `Could not delete playlist with id of ${id}`;
-        }
     },
-    // Add a playlist with no songs. Songs will be added via the add song button on the
-    // playlists.handlebars page
+    
+    // Add a playlist with no songs
     async addPlaylist(userid, title) {
         // Error checking type of input as strings
         if (typeof userid !== 'string') throw "Please provide a valid userid.";
@@ -83,9 +84,11 @@ let exportedMethods = {
     },
 
     async addSongToPlaylist(playlistId, songTitle) {
+        //Get playlist collection
         const playlistCollection = await playlistDb();
         const playlist = await this.getPlaylistById(playlistId);
 
+        //Update and return playlist with new song added
         return playlistCollection
             //.update({_id: playlistId}, {$addToSet : {songs: songTitle}}) //To allow no duplicates
             .update({_id: playlistId}, {$push : {songs: songTitle}}) //To allow duplicates
@@ -95,7 +98,10 @@ let exportedMethods = {
     },
 
     async deleteSongToPlaylist(playlistId, songName) {
+        //Get playlist collection
         const playlistCollection = await playlistDb();
+
+        //Return updated playlist with song removed
         return playlistCollection
         .update({_id: playlistId}, {$pull : {songs: songName}})
         .then(function(){
