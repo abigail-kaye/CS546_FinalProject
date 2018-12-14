@@ -224,6 +224,7 @@ app.post('/updatesong', protectPrivateRoute, async function(req, res) {
     if(!(req.body.genre2 == 'Choose')){
         genres.push(req.body.genre2);
     }
+    
     const newSong = {
         name: req.body.title,
         artist: req.body.artist,
@@ -236,7 +237,7 @@ app.post('/updatesong', protectPrivateRoute, async function(req, res) {
     res.redirect('/songList');
 })
 
-// A page to edit the song
+//Create page to edit song
 app.get('/editSong/:song', protectPrivateRoute, async function(req, res) {
     let songName = req.params.song;
     let songInfo = await songs.getSongByTitle(songName);
@@ -244,6 +245,23 @@ app.get('/editSong/:song', protectPrivateRoute, async function(req, res) {
         song: songInfo,
         layout: 'loggedin.handlebars'
     })
+})
+
+//
+app.get('/deleteSong/:songName', protectPrivateRoute, async function(req, res) {
+    let songName = req.params.songName;
+    let song  = await songs.getSongByTitle(songName);
+    let songId = song._id; 
+    users.getUserById(req.cookies.AuthCookie).then( async function (user) {
+        let allUserPlaylists = playlists.getPlaylistsByUserId(user._id);
+        for (i = 0; i<allUserPlaylists.length; i++){
+            let playlistId = allUserPlaylists[i]._id;
+            allUserPlaylists[i] = await playlists.deleteSongToPlaylist(playlistId,songName);
+        }
+    });
+    // console.log(song);
+    await songs.deleteSong(songId);
+    res.redirect('/songList');
 })
 
 //Redirect to login screen after logging out
