@@ -183,6 +183,7 @@ let exportedMethods = {
     },
 
     async updateSong(id, updatedSong) {
+        const songsCol = await songDb();
         // Error checking
         if (!id) throw "Please provide a valid ID.";
 
@@ -195,7 +196,7 @@ let exportedMethods = {
             updatedSongData.title = updatedSong.title;
         }
 
-        if (updatedSong.artist && typeof updatedArtist.artist === "string") {
+        if (updatedSong.artist && typeof updatedSong.artist === "string") {
             updatedSongData.artist = updatedSong.artist;
         }
 
@@ -216,7 +217,8 @@ let exportedMethods = {
         const query = {
             _id: id
         };
-        await songCollection.updateOne(query, updateCommand);
+        await songsCol.update({_id: id}, {$set: updatedSongData});
+        // return getSongByTitle(updatedSongData);
     }
 }
 

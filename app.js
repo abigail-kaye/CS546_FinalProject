@@ -196,17 +196,6 @@ app.get('/playlists/:playlistId/:songName', protectPrivateRoute, async function(
 });
 
 //Redirect to song info page
-// app.get('/viewSong/:songName', protectPrivateRoute, async function (req, res){
-//     console.log('GET /viewSong/:songName');
-//     let songName = req.params.songName;
-//     let songInfo = await songs.getSongByTitle(songName);
-//     res.render('pages/viewOneSong',{
-//         song: songInfo,
-//         layout: 'loggedin.handlebars'
-//     });
-// })
-
-//Redirect to song info page
 app.post('/searchResults/viewSong/:songName', protectPrivateRoute, async function (req, res){
     let songName = req.params.songName;
     let songInfo = await songs.getSongByTitle(songName);
@@ -226,15 +215,8 @@ app.post('/viewSong/:songName', protectPrivateRoute, async function(req, res) {
     });
 })
 
-// Navigate to the page where you can add a song to the database
-app.get('/createSong', protectPrivateRoute, async function(req, res) {
-    res.render('pages/createSong', {
-        layout: 'loggedin.handlebars'
-    })
-})
-
 // Post the information from the page to create a song in the database
-app.post('/createSong', protectPrivateRoute, async function(req, res) {
+app.post('/updatesong', protectPrivateRoute, async function(req, res) {
     let genres = [];
     if(!(req.body.genre1 == 'Choose')){
         genres.push(req.body.genre1);
@@ -242,28 +224,26 @@ app.post('/createSong', protectPrivateRoute, async function(req, res) {
     if(!(req.body.genre2 == 'Choose')){
         genres.push(req.body.genre2);
     }
-    await songs.addSong(req.body.title, req.body.artist, req.body.album, genres, req.body.rating);
+    const newSong = {
+        name: req.body.title,
+        artist: req.body.artist,
+        album: req.body.album,
+        rating: req.body.rating,
+        genres: genres
+    };
+    
+    await songs.updateSong(req.body.id,newSong);
     res.redirect('/songList');
 })
 
 // A page to edit the song
-app.get('/editSong', protectPrivateRoute, async function(req, res) {
+app.get('/editSong/:song', protectPrivateRoute, async function(req, res) {
+    let songName = req.params.song;
+    let songInfo = await songs.getSongByTitle(songName);
     res.render('pages/editSong', {
+        song: songInfo,
         layout: 'loggedin.handlebars'
     })
-})
-
-// Post the new details to the song in the database
-app.post('/editSong', protectPrivateRoute, async function(req, res) {
-    let genres = [];
-    if(!(req.body.genre1 == 'Choose')){
-        genres.push(req.body.genre1);
-    }
-    if(!(req.body.genre2 == 'Choose')){
-        genres.push(req.body.genre2);
-    }
-    await songs.addSong(req.body.title, req.body.artist, req.body.album, genres, req.body.rating);
-    res.redirect('/songList');
 })
 
 //Redirect to login screen after logging out

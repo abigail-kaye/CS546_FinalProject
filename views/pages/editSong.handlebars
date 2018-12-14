@@ -1,23 +1,24 @@
 <div class="row">
     <div class="col-sm-12">
-        <h1>Edit Song Song</h1>
+        <h1>Edit {{song.name}}</h1>
 
         <!-- This page should be the same as the create song page only you want
         to show the value in each input. So that title show the title of the song
         and you can double click it to change it.-->
 
-         <form id="createsong-form" action="/createSong" method="post">
+         <form id="createsong-form" action="/updatesong" method="post">
             <div class="form-group">
+                <input type="hidden" class="form-control" id="id" name="id" value="{{song._id}}">
                 <label for="username">Song Title:</label>
-                <input type="text" class="form-control" id="title" name="title" placeholder="Enter the song title.">
+                <input type="text" class="form-control" id="title" name="title" placeholder="Enter the song title." value="{{song.name}}">
                 <label for="username">Song Artist:</label>
-                <input type="text" class="form-control" id="artist" name="artist" placeholder="Enter the song artist.">
+                <input type="text" class="form-control" id="artist" name="artist" placeholder="Enter the song artist." value="{{song.artist}}">
                 <label for="username">Song Album:</label>
-                <input type="text" class="form-control" id="album" name="album" placeholder="Enter the song album.">
+                <input type="text" class="form-control" id="album" name="album" placeholder="Enter the song album." value="{{song.album}}">
                 <br>
                 <label for="username">Genre 1:</label>
-                <select name="genre1" value="Select">
-                    <option value="Select">Choose</option>
+                 <select name="genre1" value="Choose">
+                    <option value="Choose">Choose</option>
                     <option value="Alternative">Alternative</option>
                     <option value="Dance">Dance</option>
                     <option value="Pop">Pop</option>
@@ -40,7 +41,8 @@
                 </select>
                 <br>
                 <label for="username">Rating:</label>
-                <select name="rating" value="1">
+                <select name="rating" value="rating">
+                    <option value="0">- </option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -50,7 +52,7 @@
             </div>
 
             <div class="form-group">
-                <button type="submit">Add</button>
+                <button type="submit">Edit</button>
             </div>
         </form>
     </div>
