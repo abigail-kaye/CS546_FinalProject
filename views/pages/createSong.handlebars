@@ -5,11 +5,11 @@
          <form id="createsong-form" action="/createSong" method="post">
             <div class="form-group">
                 <label for="username">Song Title:</label>
-                <input type="text" class="form-control" id="title" name="title" placeholder="Enter the song title.">
+                <input type="text" class="form-control" id="title" name="title" placeholder="Enter the song title." value="{{song.name}}">
                 <label for="username">Song Artist:</label>
-                <input type="text" class="form-control" id="artist" name="artist" placeholder="Enter the song artist.">
+                <input type="text" class="form-control" id="artist" name="artist" placeholder="Enter the song artist." value="{{song.artist}}">
                 <label for="username">Song Album:</label>
-                <input type="text" class="form-control" id="album" name="album" placeholder="Enter the song album.">
+                <input type="text" class="form-control" id="album" name="album" placeholder="Enter the song album." value="{{song.album}}">
                 <br>
                 <label for="username">Genre 1:</label>
                 <select name="genre1" value="Choose">
@@ -46,6 +46,11 @@
             <div class="form-group">
                 <button type="submit">Add</button>
             </div>
+            {{#if error}}
+                <div class="error">
+                    <p>Error: {{error}}</p>
+                </div>
+            {{/if}}
         </form>
     </div>
 </div>

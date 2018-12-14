@@ -226,21 +226,31 @@ app.post('/updatesong', protectPrivateRoute, async function(req, res) {
     }
     
     const newSong = {
+        _id: req.body.id,
         name: req.body.title,
         artist: req.body.artist,
         album: req.body.album,
         rating: req.body.rating,
         genres: genres
     };
-    
-    await songs.updateSong(req.body.id,newSong);
-    res.redirect('/songList');
+    try{
+        await songs.updateSong(req.body.id,newSong);
+        res.redirect('/songList');
+    } catch(e){
+        res.render('pages/editSong', {
+            song: newSong,
+            layout: 'loggedin.handlebars',
+            error: e
+        })
+    }    
 })
 
 // Navigate to the page where you can add a song to the database
 app.get('/createSong', protectPrivateRoute, async function(req, res) {
     res.render('pages/createSong', {
-        layout: 'loggedin.handlebars'
+        song: "",
+        layout: 'loggedin.handlebars',
+        error: false
     })
 })
 
@@ -252,8 +262,26 @@ app.post('/createSong', protectPrivateRoute, async function(req, res) {
         if(!(req.body.genre2 == 'Choose')){
             genres.push(req.body.genre2);
         }
-        await songs.addSong(req.body.title, req.body.artist, req.body.album, genres, req.body.rating);
-        res.redirect('/songList');
+
+        let newSong = {
+            name:req.body.title,
+            artist: req.body.artist,
+            album: req.body.album,
+            rating: req.body.rating,
+            genres: genres
+        }
+        try {
+            await songs.addSong(newSong.name, newSong.artist, newSong.album, newSong.genres, newSong.rating);
+            res.redirect('/songList');
+        } catch (e) {
+            // console.log(e);
+            res.render('pages/createSong', {
+                song: newSong,
+                layout: 'loggedin.handlebars',
+                error: e
+            })
+        }
+        
     })
 //Create page to edit song
 app.get('/editSong/:song', protectPrivateRoute, async function(req, res) {
