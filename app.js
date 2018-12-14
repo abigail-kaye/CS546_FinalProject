@@ -98,8 +98,6 @@ app.get('/searchResults', protectPrivateRoute, function (req, res) {
                 layout: 'loggedin.handlebars'
             });
         }
-
-        
     });
     
 });
@@ -137,12 +135,10 @@ app.get('/addsong/:playlistId', protectPrivateRoute, async function(req, res) {
 
 app.post('/addsong/:playlistId', protectPrivateRoute, async function (req, res) {
     if(await songs.songExists(req.body.title)) {
-        //let songtitle = await songs.getSongByTitle(req.body.title).title;
-        //console.log(req.body.title);
-        await playlists.addSongToPlaylist(req.params.playlistId, req.body.title);
-
+        let updatedPlaylist = await playlists.addSongToPlaylist(req.params.playlistId, req.body.title);
+        // console.log(updatedPlaylist);
         res.render('pages/addsong', {
-            playlist: await playlists.getPlaylistById(req.params.playlistId),
+            playlist: updatedPlaylist,
             message: "Song added!",
             layout: 'loggedin.handlebars'
         });
@@ -155,8 +151,22 @@ app.post('/addsong/:playlistId', protectPrivateRoute, async function (req, res) 
             layout: 'loggedin.handlebars'
         });
     }
-    // await playlists.addSongToPlaylist(req.params.playlistId, req.body.title)
 })
+
+app.get('/playlists/:playlistId/:songName', protectPrivateRoute, async function(req, res) {
+    users.getUserById(req.cookies.AuthCookie).then( async function (user) {
+    const usersPlaylists = await playlists.getPlaylistsByUserId(user._id);
+    const playlist = usersPlaylists[req.params.playlistId];
+    const songName = playlist.songs[req.params.songName];
+    const updatedPlaylist = await playlists.deleteSongToPlaylist(playlist._id,songName);
+    usersPlaylists[req.params.playlistId] = updatedPlaylist;
+    res.redirect('back')
+    });
+});
+
+app.post('/playlists/:playlistId/:songName', protectPrivateRoute, async function(req, res) {
+        res.redirect('/playlists');
+    })
 
 app.get('/logout', function (req, res) {
     res.clearCookie("AuthCookie");
