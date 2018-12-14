@@ -237,6 +237,24 @@ app.post('/updatesong', protectPrivateRoute, async function(req, res) {
     res.redirect('/songList');
 })
 
+// Navigate to the page where you can add a song to the database
+app.get('/createSong', protectPrivateRoute, async function(req, res) {
+    res.render('pages/createSong', {
+        layout: 'loggedin.handlebars'
+    })
+})
+
+app.post('/createSong', protectPrivateRoute, async function(req, res) {
+         let genres = [];
+        if(!(req.body.genre1 == 'Choose')){
+            genres.push(req.body.genre1);
+        }
+        if(!(req.body.genre2 == 'Choose')){
+            genres.push(req.body.genre2);
+        }
+        await songs.addSong(req.body.title, req.body.artist, req.body.album, genres, req.body.rating);
+        res.redirect('/songList');
+    })
 //Create page to edit song
 app.get('/editSong/:song', protectPrivateRoute, async function(req, res) {
     let songName = req.params.song;
