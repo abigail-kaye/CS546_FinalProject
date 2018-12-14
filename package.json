@@ -8,7 +8,7 @@
     "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Edrick Ramos",
+  "author": "Edrick Ramos, Abigail Kaye",
   "license": "MIT",
   "dependencies": {
     "bcrypt": "^3.0.2",
