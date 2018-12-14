@@ -1,19 +1,32 @@
 <div class="row">
     <div class="col-sm-12">
-        {{#each playlists}}
+        {{#each playlists as |playlists playlistNum| }}
         <h1>{{this.title}}</h1>
             <ul class="list-group">
                 <li class="list-group-item active">Songs</li>
 
-                <form id="static-form" action='/addsong/{{this._id}}' method="get">
+                <form id="static-form">
                     <div class="form-group">
-                        <button type="submit">Add Song</button>
+                        <button type="submit" formaction='/addsong/{{this._id}}'>Add Song</button>
                     </div>
                 </form>
 
-                {{#each this.songs}}
-                <li class="list-group-item">{{ this }}</li>
-                {{/each}}
+                <form id="playlist-form">
+                <table border="1" cellpadding="5" width="100%" height="50px" >
+                    <tr>
+                        <td>Index</td>
+                        <td>Song Name</td>
+                        <td>Delete song</td>
+                    </tr>
+                    {{#each this.songs as |song songName|}}
+                    <tr>
+                        <td>{{@index}}</td>
+                        <td>{{this}}</td>
+                        <td><button type="submit" formaction="playlists/{{playlistNum}}/{{@index}}">Delete</button></td>
+                    </tr>
+                    {{/each}}
+                </table>
+                </form>
             </ul>
         {{/each}}
     </div>

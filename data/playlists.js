@@ -94,10 +94,13 @@ let exportedMethods = {
             });
     },
 
-    async deleteSongToPlaylist(playlistId, songId) {
-        // Get playlist by id
-        // removeOne function based on songId
-
+    async deleteSongToPlaylist(playlistId, songName) {
+        const playlistCollection = await playlistDb();
+        return playlistCollection
+        .update({_id: playlistId}, {$pull : {songs: songName}})
+        .then(function(){
+            return exportedMethods.getPlaylistById(playlistId);
+        })
     }
 }
 
