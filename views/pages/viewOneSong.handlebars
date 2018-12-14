@@ -5,14 +5,24 @@
             <p> Artist: {{song.artist}}</p>
             <p> Genre: {{song.genres}}</p>
             <p> Rating: {{song.rating}}</p>
-            <p> Reviews: </p>
-            <p class ="reviews"> {{reviews}}</p>
+            {{!-- <p> Reviews: </p> --}}
+            {{!-- <p class ="reviews"> {{reviews}}</p> --}}
+
+            {{!-- <div>
+                <form class="songButtons" action='/searchResults/viewSong' method="post">
+                    <button type ="button" formaction="/searchResults/viewSong/{{song.name}}">Edit</button>
+                </form>
+
+                <form class="songButtons" action='/searchResults/viewSong' method="post">
+                    <button type="button" onclick="alert('Permenantly deleting')"> Delete</button>
+                </form>
+            </div> --}}
         
             <form class="songButtons">
-                <button type="button" onclick="alert('Editing a song')"> Edit info</button>
-                <button type="button" onclick="alert('Adding a review')">Add review</button>
-                <button type="button" onclick="alert('Adding a rating')"> Add rating</button>
-                <button type="button" onclick="alert('Permenantly deleting')"> Delete from Library</button>
+                <button type="button" onclick="alert('Editing a song')"> Edit</button>
+                {{!-- <button type="button" onclick="alert('Adding a review')">Add review</button> --}}
+                {{!-- <button type="button" onclick="alert('Adding a rating')"> Add rating</button> --}}
+                <button type="button" onclick="alert('Permenantly deleting')"> Delete</button>
             </form>
         </main>
     </div>

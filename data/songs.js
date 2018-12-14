@@ -15,7 +15,7 @@ let exportedMethods = {
         // Search users for the specific ID
         for (i = 0; i < songs.length; i++) {
             let song = songs[i];
-            if (song.title === title)
+            if (song.name === title)
                 return song;
         }
 
@@ -139,23 +139,19 @@ let exportedMethods = {
         if (typeof title !== 'string') throw "Please provide a valid song title.";
         if (typeof artist !== 'string') throw "Please provide a valid artist name.";
         if (typeof album !== 'string') throw "Please provide a valid album title.";
-        if (typeof genre !== 'string') throw "Please provide a valid genre.";
         if (typeof rating !== 'string') throw "Please provide a valid rating.";
 
         // Get song collection, generate id that is only numeric
         const songCollection = await songDb();
-        //const generateId = Math.floor(Math.random() * 100000000) + 100;
-        //const stringId = generateId.toString();
 
         // Build song object
         const newSong = {
             _id: uuid.v4(),
-            title: title,
+            name: title,
             artist: artist,
             album: album,
-            genre: genre,
             rating: rating,
-            tags: []
+            genres: genre
             //Add something about userID 
         };
 

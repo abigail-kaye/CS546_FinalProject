@@ -1,0 +1,57 @@
+<div class="row">
+    <div class="col-sm-12">
+        <h1>Edit Song Song</h1>
+
+        <!-- This page should be the same as the create song page only you want
+        to show the value in each input. So that title show the title of the song
+        and you can double click it to change it.-->
+
+         <form id="createsong-form" action="/createSong" method="post">
+            <div class="form-group">
+                <label for="username">Song Title:</label>
+                <input type="text" class="form-control" id="title" name="title" placeholder="Enter the song title.">
+                <label for="username">Song Artist:</label>
+                <input type="text" class="form-control" id="artist" name="artist" placeholder="Enter the song artist.">
+                <label for="username">Song Album:</label>
+                <input type="text" class="form-control" id="album" name="album" placeholder="Enter the song album.">
+                <br>
+                <label for="username">Genre 1:</label>
+                <select name="genre1" value="Select">
+                    <option value="Select">Choose</option>
+                    <option value="Alternative">Alternative</option>
+                    <option value="Pop">Pop</option>
+                    <option value="Metal">Metal</option>
+                    <option value="Rap">Rap</option>
+                    <option value="Rock">Rock</option>
+                    <option value="Classical">Classical</option>
+                </select>
+                <br>
+                <label for="username">Genre 2:</label>
+                <select name="genre2" value="Choose">
+                    <option value="Choose">Choose</option>
+                    <option value="Alternative">Alternative</option>
+                    <option value="Pop">Pop</option>
+                    <option value="Metal">Metal</option>
+                    <option value="Rap">Rap</option>
+                    <option value="Rock">Rock</option>
+                    <option value="Classical">Classical</option>
+                </select>
+                <br>
+                <label for="username">Rating:</label>
+                <select name="rating" value="1">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <button type="submit">Add</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
