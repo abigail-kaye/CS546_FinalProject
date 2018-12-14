@@ -1,25 +1,14 @@
 <div class="row">
     <div class="col-sm-12">
          <main>
-            <h1> Song: {{song.name}}</h1>
-            <p> Artist: {{song.artist}}</p>
-            <p> Genre: {{song.genres}}</p>
-            <p> Rating: {{song.rating}}</p>
-            {{!-- <p> Reviews: </p> --}}
-            {{!-- <p class ="reviews"> {{reviews}}</p> --}}
+             <form class="songButtons">
+            <h1 id="name" name="name"> Song: {{song.name}}</h1>
+            <p id="artist"> Artist: {{song.artist}}</p>
+            <p id="genre"> Genre: {{song.genres}}</p>
+            <p id="rating"> Rating: {{song.rating}}</p>
 
-            {{!-- <div>
-                <form class="songButtons" action='/searchResults/viewSong' method="post">
-                    <button type ="button" formaction="/searchResults/viewSong/{{song.name}}">Edit</button>
-                </form>
-
-                <form class="songButtons" action='/searchResults/viewSong' method="post">
-                    <button type="button" onclick="alert('Permenantly deleting')"> Delete</button>
-                </form>
-            </div> --}}
-        
-            <form class="songButtons">
-                <button type="button" onclick="alert('Editing a song')"> Edit</button>
+            
+                <button type="submit" formaction='/editSong/{{song.name}}'> Edit</button>
                 {{!-- <button type="button" onclick="alert('Adding a review')">Add review</button> --}}
                 {{!-- <button type="button" onclick="alert('Adding a rating')"> Add rating</button> --}}
                 <button type="button" onclick="alert('Permenantly deleting')"> Delete</button>
