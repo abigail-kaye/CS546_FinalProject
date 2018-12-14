@@ -125,6 +125,34 @@ app.post('/playlists', function(req,res) {
     res.redirect('/playlists');
 })
 
+app.get('/addplaylist', protectPrivateRoute, function (req,res) {
+    res.render('pages/addplaylist', {
+        layout: 'loggedin.handlebars'
+    });
+})
+
+app.post('/addplaylist', protectPrivateRoute, function (req,res) {
+    let playlistName = req.body.name;
+    users.getUserById(req.cookies.AuthCookie).then( async function (user) {
+        let playlistID = await playlists.addPlaylist(user._id,playlistName);
+        let allPlaylists = await playlists.getPlaylistsByUserId(user._id);
+        res.render('/pages/playlists',{
+            playlist: allPlaylists,
+            layout: 'loggedin.handlebars'
+        });
+    });
+})
+
+app.get('/deleteplaylist/:playlistId', protectPrivateRoute, async function (req, res) {
+    
+    users.getUserById(req.cookies.AuthCookie).then(async function (user){
+        let allPlaylists = await playlists.getPlaylistsByUserId(user._id);
+        let toDelete = allPlaylists[req.params.playlistId];
+        playlists.deletePlaylist(toDelete._id);
+        res.redirect('back')
+    })
+})
+
 app.get('/addsong/:playlistId', protectPrivateRoute, async function(req, res) {
     const playlist = await playlists.getPlaylistById(req.params.playlistId);
     res.render('pages/addsong', {
