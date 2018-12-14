@@ -136,11 +136,11 @@ let exportedMethods = {
     
     async addSong(title, artist, album, genre, rating) {
         // Error checking type of input as strings
-        if (typeof title !== 'string') throw "Please provide a valid song title.";
-        if (typeof artist !== 'string') throw "Please provide a valid artist name.";
-        if (typeof album !== 'string') throw "Please provide a valid album title.";
-        if (typeof rating !== 'string') throw "Please provide a valid rating.";
-
+        if (!title || typeof title !== 'string') throw "Please provide a valid song title.";
+        if (!artist || typeof artist !== 'string') throw "Please provide a valid artist name.";
+        if (!album || typeof album !== 'string') throw "Please provide a valid album title.";
+        if (!rating || typeof rating !== 'string') throw "Please provide a valid rating.";
+        if (genre.length == 0) throw "Please select at least one genre";
         // Get song collection, generate id that is only numeric
         const songCollection = await songDb();
 
@@ -192,22 +192,35 @@ let exportedMethods = {
 
         // Check for all song attributes and check if they are string.
         // If they exist, add them to the song builder.
-        if (updatedSong.title && typeof updatedSong.title === "string") {
-            updatedSongData.title = updatedSong.title;
+        if (updatedSong.name && typeof updatedSong.name === "string") {
+            updatedSongData.name = updatedSong.name;
+        } else {
+            throw 'Please provide a valid song name';
         }
 
         if (updatedSong.artist && typeof updatedSong.artist === "string") {
             updatedSongData.artist = updatedSong.artist;
+        } else {
+            throw 'Please provide a valid artist name';
         }
 
         if (updatedSong.album && typeof updatedSong.album === "string") {
             updatedSongData.album = updatedSong.album;
+        } else {
+            throw 'Please enter a valid album name';
         }
 
         if (updatedSong.rating && typeof updatedSong.rating === "string") {
             updatedSongData.rating = updatedSong.rating;
+        } else {
+            throw 'Please enter a valid rating';
         }
 
+        let genres = updatedSong.genres;
+        if (genres.length == 0)
+            throw 'Please choose at least one genre';
+        
+            updatedSongData.genres = updatedSong.genres;
         // Build parameters for updateOne function including:
         // the updated information and
         // the song id
