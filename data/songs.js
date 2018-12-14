@@ -3,46 +3,60 @@ const songDb = mongoCollections.songCollection;
 const uuid = require("node-uuid");
 
 let exportedMethods = {
+
     async getSongByTitle(title) {
+        //Error checking
         if (typeof title !== 'string') throw "Please provide a valid song title.";
+        
+        //Get song collection
         const songsCol = await songDb();
         const songs = await songsCol.find().toArray();
-
+        
         // Search users for the specific ID
         for (i = 0; i < songs.length; i++) {
             let song = songs[i];
-            if (song.title === title) {
+            if (song.title === title)
                 return song;
-            }
         }
 
         // If user not found return message.
         return "Song not found: " + title;
     },
+
     async songExists(songTitle) {
+        //Error checking
         if (typeof songTitle !== 'string') throw "Please provide a valid song title.";
 
+        //Get song collection
         const songsCol = await songDb();
         const songs = await songsCol.find().toArray();
 
+        //Loop through song collection
+        //Check if any of the collection song titles match songTitle
         for (i = 0; i < songs.length; i++) {
             let song = songs[i];
-            if (song.name === songTitle) {
+            if (song.name === songTitle)
                 return true;
-            }
         }
 
         return false;
     },
 
     async searchForSong(searchValue){
+        //Empty array of found songs
         let foundSongs = [];
 
+        //Return empty array if invaild query
         if (typeof searchValue.query !== 'string') return foundSongs;
 
         let searchTerm = searchValue.query;
+
+        //Get song collection
         const songsCol = await songDb();
         const songs = await songsCol.find().toArray();
+
+        //Loop through song collection
+        //Check if song name, artist, album, genres, or tags include the queried string
         for (i = 0; i < songs.length; i++) {
             let song = songs[i];
             let added = false;
@@ -104,21 +118,22 @@ let exportedMethods = {
         return userSongs;
     },
     
-    /////////////
-
     async deleteSong(id) {
         // Error checking
         if (!id) throw "Please provide a valid ID.";
+
         // Get songs and remove one by id
         const songCollection = await songDb();
         const deletionInfo = await songCollection.removeOne({
             _id: id
         });
+
         // Else throw error message
         if(deletionInfo.deleteCount === 0) {
             throw `Could not delete song with id of ${id}`;
         }
     },
+    
     async addSong(title, artist, album, genre, rating) {
         // Error checking type of input as strings
         if (typeof title !== 'string') throw "Please provide a valid song title.";
@@ -150,7 +165,6 @@ let exportedMethods = {
         return newId;
     },
 
-    ///////////////////
     async addTag(song, tag1, tag2, tag3, tag4, tag5){
         if (typeof song !== 'string') throw 'Please provide a valid song title.';
 
@@ -163,6 +177,7 @@ let exportedMethods = {
         return tagList;
     },
 
+    //addTag helper to check if valid string tag
     async checkTag(tagList, tag){
         if (tag !== null){
             if (typeof tag !== 'string') throw 'Please provide a valid tag';
@@ -170,7 +185,6 @@ let exportedMethods = {
         }
         return tagList;
     },
-////////////////////////
 
     async updateSong(id, updatedSong) {
         // Error checking

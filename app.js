@@ -25,21 +25,20 @@ app.use(bodyParser.urlencoded({
 }));
 
 function noDuplicateLogin(req, res, next) {
-    if(typeof req.cookies.AuthCookie !== 'undefined') {
+    if(typeof req.cookies.AuthCookie !== 'undefined') 
         res.redirect('/songList');
-    }else {
+    else 
         return next();
-    }
 }
 
 function protectPrivateRoute(req, res, next) {
-    if(typeof req.cookies.AuthCookie !== 'undefined') {
+    if(typeof req.cookies.AuthCookie !== 'undefined')
         return next();
-    }else {
+    else
         res.status(403).send("User not logged in.");
-    }
 }
 
+//Automatically redirect to home page (song list page)
 app.get('/', function (req, res) {
     if(typeof req.cookies.AuthCookie === "undefined") {
         res.redirect('/login');
@@ -48,10 +47,12 @@ app.get('/', function (req, res) {
     }
 });
 
+//Create login page
 app.get('/login', noDuplicateLogin, function (req, res) {
     res.render('pages/login');
 })
 
+//Redirect to song list page if authenticated user/session 
 app.post('/login', function (req, res) {
     users.getUserByName(req.body.username).then(function (user) {
         bcrypt.compare(req.body.password, user.hashedPassword, function (err, response) {
@@ -65,10 +66,10 @@ app.post('/login', function (req, res) {
     });
 });
 
+//Create song list page for user
 app.get('/songList', protectPrivateRoute, function (req, res) {
     users.getUserById(req.cookies.AuthCookie).then( async function (user) {
         const userSongs = await songs.getSongListByUser(user._id);
-        //console.log(userSongs);
         res.render('pages/songList', {
             songs: userSongs,
             layout: 'loggedin.handlebars'
@@ -76,10 +77,12 @@ app.get('/songList', protectPrivateRoute, function (req, res) {
     });
 });
 
+//Redirect to song list page
 app.post('/songList', function (req, res) {
     res.redirect('/songList');
 });
 
+//Create search result page based search results
 app.get('/searchResults', protectPrivateRoute, function (req, res) {
    users.getUserById(req.cookies.AuthCookie).then( async function (user) {
         const userSongs = await songs.searchForSong(req.query);
@@ -102,6 +105,7 @@ app.get('/searchResults', protectPrivateRoute, function (req, res) {
     
 });
 
+//Redirect to song list page
 app.post('/searchResults', function (req,res) {
     res.redirect('/songList');
 })
@@ -113,7 +117,6 @@ app.post('/searchResults', function (req,res) {
 app.get('/playlists', protectPrivateRoute, function (req, res) {
     users.getUserById(req.cookies.AuthCookie).then( async function (user) {
         const usersPlaylists = await playlists.getPlaylistsByUserId(user._id);
-        //console.log(usersPlaylists);
         res.render('pages/playlists', {
             playlists: usersPlaylists,
             layout: 'loggedin.handlebars'
@@ -121,16 +124,19 @@ app.get('/playlists', protectPrivateRoute, function (req, res) {
     });
 });
 
+//Redirect to view all playlists
 app.post('/playlists', function(req,res) {
     res.redirect('/playlists');
 })
 
+//Create page to add another playlist
 app.get('/addplaylist', protectPrivateRoute, function (req,res) {
     res.render('pages/addplaylist', {
         layout: 'loggedin.handlebars'
     });
 })
 
+//Redirect to playlist page after a new playlist has been created
 app.post('/addplaylist', protectPrivateRoute, function (req,res) {
     let playlistName = req.body.name;
     users.getUserById(req.cookies.AuthCookie).then( async function (user) {
@@ -139,8 +145,8 @@ app.post('/addplaylist', protectPrivateRoute, function (req,res) {
     });
 })
 
+//Stay on same page after deleting a playlist
 app.get('/deleteplaylist/:playlistId', protectPrivateRoute, async function (req, res) {
-    
     users.getUserById(req.cookies.AuthCookie).then(async function (user){
         let allPlaylists = await playlists.getPlaylistsByUserId(user._id);
         let toDelete = allPlaylists[req.params.playlistId];
@@ -149,6 +155,7 @@ app.get('/deleteplaylist/:playlistId', protectPrivateRoute, async function (req,
     })
 })
 
+//Create page for adding a song to a playlist
 app.get('/addsong/:playlistId', protectPrivateRoute, async function(req, res) {
     const playlist = await playlists.getPlaylistById(req.params.playlistId);
     res.render('pages/addsong', {
@@ -157,16 +164,15 @@ app.get('/addsong/:playlistId', protectPrivateRoute, async function(req, res) {
     });
 });
 
+//Create page based on if song was added or not
 app.post('/addsong/:playlistId', protectPrivateRoute, async function (req, res) {
     if(await songs.songExists(req.body.title)) {
         let updatedPlaylist = await playlists.addSongToPlaylist(req.params.playlistId, req.body.title);
-        // console.log(updatedPlaylist);
         res.render('pages/addsong', {
             playlist: updatedPlaylist,
             message: "Song added!",
             layout: 'loggedin.handlebars'
         });
-        // res.redirect("/playlists");
         // But need user id
     }else {
         res.render('pages/addsong', {
@@ -177,6 +183,7 @@ app.post('/addsong/:playlistId', protectPrivateRoute, async function (req, res) 
     }
 })
 
+//Stay on same page after deleting a song from a playlist
 app.get('/playlists/:playlistId/:songName', protectPrivateRoute, async function(req, res) {
     users.getUserById(req.cookies.AuthCookie).then( async function (user) {
     const usersPlaylists = await playlists.getPlaylistsByUserId(user._id);
@@ -188,10 +195,27 @@ app.get('/playlists/:playlistId/:songName', protectPrivateRoute, async function(
     });
 });
 
-app.post('/playlists/:playlistId/:songName', protectPrivateRoute, async function(req, res) {
-        res.redirect('/playlists');
-    })
+//Redirect to song info page
+app.get('/viewSong/:songName', function (req, res){
+    res.redirect('pages/viewOneSong');
+})
 
+//Redirect to song info page
+app.get('/searchResults/viewSong/:songName', function (req, res){
+    res.redirect('pages/viewOneSong');
+})
+
+//Create song info page ------- TO BE COMPLETED----------------
+app.post('/viewSong/:songName', protectPrivateRoute, async function(req, res) {
+    let songName = req.params.songName;
+    let songInfo = await songs.getSongByTitle(songName);
+    res.render('pages/viewOneSong',{
+        song: songInfo,
+        layout: 'loggedin.handlebars'
+    });
+})
+
+//Redirect to login screen after logging out
 app.get('/logout', function (req, res) {
     res.clearCookie("AuthCookie");
     res.redirect('/');
