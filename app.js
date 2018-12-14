@@ -134,12 +134,8 @@ app.get('/addplaylist', protectPrivateRoute, function (req,res) {
 app.post('/addplaylist', protectPrivateRoute, function (req,res) {
     let playlistName = req.body.name;
     users.getUserById(req.cookies.AuthCookie).then( async function (user) {
-        let playlistID = await playlists.addPlaylist(user._id,playlistName);
-        let allPlaylists = await playlists.getPlaylistsByUserId(user._id);
-        res.render('/pages/playlists',{
-            playlist: allPlaylists,
-            layout: 'loggedin.handlebars'
-        });
+        await playlists.addPlaylist(user._id,playlistName);
+        res.redirect('/playlists');
     });
 })
 
