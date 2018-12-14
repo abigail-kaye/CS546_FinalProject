@@ -72,7 +72,7 @@ let exportedMethods = {
         // Build song object
         const newPlaylist = {
             _id: stringId,
-            userId: userId,
+            userId: userid,
             title: title
         };
 
